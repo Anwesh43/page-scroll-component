@@ -5,6 +5,7 @@ class PageScrollBlockComponent extends HTMLElement {
         this.shadow = this.attachShadow({mode:'open'})
         this.createNavBar()
         this.createBlocksFromChildren()
+        this.createNavBarList()
     }
     createBlocksFromChildren() {
         for(var i=0;i<this.children.length;i++) {
@@ -36,6 +37,13 @@ class PageScrollBlockComponent extends HTMLElement {
         this.shadow.appendChild(this.bar)
     }
     createNavBarList() {
+        this.navUL = document.createElement('ul')
+        this.navUL.style.float = 'right'
+        this.navUL.style.paddingRight = '15%'
+        this.navUL.innerHTML = `<li style="display:inline;padding-right:10%;font-size:${window.innerHeight/20}">google</li><li style="display:inline;padding-right:10%;font-size:${window.innerHeight/20}">google</li><li style="display:inline;padding-right:10%;font-size:${window.innerHeight/20}">google</li><li style="display:inline;padding-right:10%;font-size:${window.innerHeight/20}">google</li>`
+        this.bar.appendChild(this.navUL)
+    }
+    createList() {
 
     }
 }
