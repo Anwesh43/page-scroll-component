@@ -5,6 +5,7 @@ class PageScrollBlockComponent extends HTMLElement {
         this.shadow = this.attachShadow({mode:'open'})
         this.list = []
         this.blocks = []
+        this.animated = false
         this.createNavBar()
         this.createNavBarList()
         this.createBlocksFromChildren()
@@ -29,7 +30,6 @@ class PageScrollBlockComponent extends HTMLElement {
         window.onscroll = (event) => {
             const y = window.scrollY + window.innerHeight/3
             this.blocks.forEach((block,index)=>{
-
                 if(index != this.activetab) {
                     if(y >= block.offsetTop && y < block.offsetTop + block.offsetHeight) {
                         this.changeActiveLink(index)
@@ -37,6 +37,11 @@ class PageScrollBlockComponent extends HTMLElement {
                 }
             })
         }
+        this.list.forEach((li,index)=>{
+            li.onclick = (li) => {
+                this.startScrollAnimation(index)
+            }
+        })
     }
     createDivBlock(block) {
         const div = document.createElement('div')
@@ -78,6 +83,25 @@ class PageScrollBlockComponent extends HTMLElement {
             li.style.borderBottom = '3px solid black'
         }
         this.list.push(li)
+    }
+    startScrollAnimation(index) {
+        if(!this.animated) {
+            this.animated = true
+            const k = 10
+            const scroll_speed = (this.blocks[index].offsetTop-window.scrollY)/k
+            console.log(scroll_speed)
+            var n = 0
+            const interval = setInterval(()=>{
+                console.log(n)
+                window.scrollBy(0,scroll_speed)
+                console.log(window.scrollY)
+                n++
+                if(n == k) {
+                    clearInterval(interval)
+                    this.animated = false
+                }
+            },75)
+        }
     }
 }
 customElements.define('page-scroll-block',PageScrollBlockComponent)
