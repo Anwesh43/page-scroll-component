@@ -3,9 +3,11 @@ class PageScrollBlockComponent extends HTMLElement {
     constructor() {
         super()
         this.shadow = this.attachShadow({mode:'open'})
+        this.list = []
         this.createNavBar()
-        this.createBlocksFromChildren()
         this.createNavBarList()
+        this.createBlocksFromChildren()
+
     }
     createBlocksFromChildren() {
         for(var i=0;i<this.children.length;i++) {
@@ -26,8 +28,10 @@ class PageScrollBlockComponent extends HTMLElement {
         div.style.height = '100%'
         div.innerHTML = block.innerHTML
         this.shadow.appendChild(div)
+        this.addNavLink(block.getAttribute('tag'))
     }
     createNavBar() {
+        this.activetab = 0
         this.bar = document.createElement('div')
         this.bar.style.position = 'fixed'
         this.bar.style.background = 'white'
@@ -39,12 +43,23 @@ class PageScrollBlockComponent extends HTMLElement {
     createNavBarList() {
         this.navUL = document.createElement('ul')
         this.navUL.style.float = 'right'
-        this.navUL.style.paddingRight = '15%'
-        this.navUL.innerHTML = `<li style="display:inline;padding-right:10%;font-size:${window.innerHeight/20}">google</li><li style="display:inline;padding-right:10%;font-size:${window.innerHeight/20}">google</li><li style="display:inline;padding-right:10%;font-size:${window.innerHeight/20}">google</li><li style="display:inline;padding-right:10%;font-size:${window.innerHeight/20}">google</li>`
+        this.navUL.style.paddingRight = '20%'
         this.bar.appendChild(this.navUL)
     }
-    createList() {
-
+    addNavLink(tag) {
+        const li = document.createElement('li')
+        li.style.display = 'inline'
+        li.style.marginRight = '12%'
+        li.style.fontSize = window.innerHeight/20
+        const span = document.createElement('span')
+        span.innerHTML = tag
+        span.style.float = 'top'
+        li.appendChild(span)
+        this.navUL.appendChild(li)
+        if(this.list.length == this.activetab) {
+            li.style.borderBottom = '3px solid black'
+        }
+        this.list.push(li)
     }
 }
 customElements.define('page-scroll-block',PageScrollBlockComponent)
